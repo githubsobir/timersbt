@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:numberpicker/numberpicker.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyAp()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyAp()));
 }
 
 class MyAp extends StatefulWidget {
@@ -12,8 +12,6 @@ class MyAp extends StatefulWidget {
 }
 
 class _MyApState extends State<MyAp> {
-  TabController tb;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -22,8 +20,8 @@ class _MyApState extends State<MyAp> {
   }
 
   int minuteInterval = 0;
-  int hour = 0;
-  int minute = 0;
+  int hour = 3;
+  int minute = 20;
   int second = 0;
   bool started = true;
   bool stopped = true;
@@ -32,7 +30,18 @@ class _MyApState extends State<MyAp> {
   bool checkTimer = true;
   bool visibleContent = true;
   String hhhh = "0", mmmm, ssss;
-  String languageTitle = "";
+  String languageTitle = "Test sinovlari qolgan vaqt";
+  double sliderValue = 3;
+  double sliderValueMinute = 20;
+  int qoshimcha = 0;
+
+  List<Color> myTheme1 = [
+    Colors.black,
+    Colors.white,
+    Colors.grey,
+    Colors.red,
+    Colors.grey.shade200,
+  ];
 
   List<String> langUzb = [
     "Chet tili sefr",
@@ -44,22 +53,6 @@ class _MyApState extends State<MyAp> {
     "Большой тест",
     "Тест 3",
   ];
-
-  showTitle() {
-    Duration(seconds: 10);
-    setState(() {
-      languageTitle = langUzb[0];
-    });
-    showTitle2();
-  }
-
-  showTitle2() {
-    Duration(seconds: 10);
-    setState(() {
-      languageTitle = langRus[0];
-    });
-    showTitle();
-  }
 
   void start() {
     setState(() {
@@ -106,7 +99,23 @@ class _MyApState extends State<MyAp> {
 
           timeForTimer = timeForTimer - 1;
         }
+        if (timeForTimer % 15 == 0 && qoshimcha == 0) {
+          qoshimcha = 1;
+          languageTitle = "Test sinovi tugashiga qolgan vaqt";
+        } else if(timeForTimer % 15 == 0 && qoshimcha == 1){
+          qoshimcha = 0;
+          languageTitle = "Осталось время до конца теста";
+        }
+
+
+
       });
+    });
+  }
+
+  void titleText() {
+    Future.delayed(Duration(seconds: 30)).then((value) {
+      setState(() {});
     });
   }
 
@@ -194,148 +203,158 @@ class _MyApState extends State<MyAp> {
           ),
           Visibility(
             visible: visibleContent,
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(10),
-                  decoration:BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-
-                      boxShadow: [
-                        BoxShadow(color: Colors.grey.shade200,
-                          blurRadius: 1,
-                          spreadRadius: 1,
-                          offset: Offset(0.2,0.2),
-                        )
-                      ]
-                  ),
-                  child: Column(
-                    children: [
-                      Text("Test turini tanlang", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                      Container(
-                        height:170,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade200,
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            offset: Offset(0.2, 0.2),
+                          )
+                        ]),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Test turini tanlang",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        Container(
+                          height: 170,
                           width: 200,
-
-
-                          child:ListView.builder(
+                          child: ListView.builder(
                             itemCount: langUzb.length,
                             itemBuilder: (context, index) {
-                            return ListTile(
-
+                              return ListTile(
                                 title: Text('${langUzb[index]}'),
-                                leading: Checkbox(value: true, onChanged:(val){}),
+                                leading:
+                                    Checkbox(value: true, onChanged: (val) {}),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 300,
+                    margin: EdgeInsets.all(20),
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade200,
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            offset: Offset(0.2, 0.2),
+                          )
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              CupertinoIcons.stopwatch,
+                              size: screeSizes * 0.1,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[200],
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: Offset(0.2, 0.1),
+                                    )
+                                  ]),
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                " 0$sliderValue : ${sliderValueMinute <= 9 ? "${"0" + sliderValueMinute.round().toString()}" : sliderValueMinute.round().toString()}",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 50),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "soat",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Slider(
+                              value: sliderValue,
+                              min: 0,
+                              max: 5,
+                              divisions: 5,
+                              label: '$sliderValue',
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    sliderValue = value;
+                                    hour = value.round().toInt();
+                                  },
                                 );
-                          },),
-                      ),
-                    ],
+                              },
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "minut",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Slider(
+                              value: sliderValueMinute,
+                              min: 5,
+                              max: 55,
+                              divisions: 55,
+                              label: '${sliderValueMinute.round()}',
+                              onChanged: (value) {
+                                setState(
+                                  () {
+                                    sliderValueMinute = value;
+                                    minute = value.round().toInt();
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-
-                Container(
-                  margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(10),
-                  decoration:BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(color: Colors.grey.shade200,
-                      blurRadius: 1,
-                        spreadRadius: 1,
-                        offset: Offset(0.2,0.2),
-                      )
-                    ]
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Text("Soat", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
-                          ),
-                          NumberPicker(
-                            minValue: 0,
-
-                            selectedTextStyle: TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 30
-                            ),
-                            textStyle: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                            maxValue: 4,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent, width: 2)
-                            ),
-                            value: hour,
-                            onChanged: (val) {
-                              setState(() {
-
-                                hour = val;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Text("Minut",  style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),
-                          ),
-
-                          NumberPicker(
-                            minValue: 0,
-                            step: 10,
-                            selectedTextStyle: TextStyle(
-                                color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 30
-                            ),
-                            textStyle: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                            maxValue: 59,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent, width: 2)
-                            ),
-                            value: minute,
-                            onChanged: (val) {
-                              setState(() {
-                                minute = val;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      // Column(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Padding(
-                      //       padding: EdgeInsets.only(bottom: 10),
-                      //       child: Text("Sekund"),
-                      //     ),
-                      //     NumberPicker(
-                      //       minValue: 0,
-                      //       step: 10,
-                      //       textStyle: TextStyle(
-                      //           fontSize: 15, fontWeight: FontWeight.w600),
-                      //       maxValue: 59,
-                      //       value: second,
-                      //       onChanged: (val) {
-                      //         setState(() {
-                      //           second = val;
-                      //         });
-                      //       },
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
@@ -349,37 +368,36 @@ class _MyApState extends State<MyAp> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screeSize = screenWidth * screenHeight * 0.0008;
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("DTM Timer"),
-      //   bottom: TabBar(
-      //     tabs: <Widget>[
-      //       Text("Timer"),
-      //       Text("StopTimer"),
-      //     ],
-      //     labelPadding: EdgeInsets.only(bottom: 10),
-      //     labelStyle: TextStyle(fontSize: 18),
-      //     unselectedLabelColor: Colors.red,
-      //     controller: tb,
-      //   ),
-      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           // showTitle(),
-
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("DTM"),
+              SizedBox(
+                height: 40,
+                width: 30,
+              ),
+            ],
+          ),
           Expanded(
-            flex:1,
+            flex: 1,
             child: Text(
-              "languageTitle",
-              style: TextStyle(color: Colors.black, fontSize: screeSize*0.1),
+              languageTitle,
+              style: TextStyle(color: Colors.black, fontSize: screeSize * 0.1),
             ),
           ),
-          Expanded(flex: 3, child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              timer(screeSizes: screeSize),
-            ],
-          )),
+          Expanded(
+              flex: 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  timer(screeSizes: screeSize),
+                ],
+              )),
           //
           // Text("StopTimer"),
         ],

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:group_button/group_button.dart';
 
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyAp()));
@@ -12,12 +13,6 @@ class MyAp extends StatefulWidget {
 }
 
 class _MyApState extends State<MyAp> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    // tb = TabController(length: 2, vsync: this);
-    super.initState();
-  }
 
   int minuteInterval = 0;
   int hour = 3;
@@ -25,8 +20,8 @@ class _MyApState extends State<MyAp> {
   int second = 0;
   bool started = true;
   bool stopped = true;
-  int timeForTimer = 0;
-  String timeToDisplay = "";
+  int timeForTimer = 12000;
+  String timeToDisplay = "03:20:00";
   bool checkTimer = true;
   bool visibleContent = true;
   String hhhh = "0", mmmm, ssss;
@@ -34,39 +29,48 @@ class _MyApState extends State<MyAp> {
   double sliderValue = 3;
   double sliderValueMinute = 20;
   int qoshimcha = 0;
+  int colorIndex = 0;
+  bool changeTimerValue = false;
+  int timerPause;
+
 
   List<Color> myTheme1 = [
+    // #index1
     Colors.black,
     Colors.white,
     Colors.grey,
     Colors.red,
     Colors.grey.shade200,
-  ];
-
-  List<String> langUzb = [
-    "Chet tili sefr",
-    "Katta test",
-    "Test 3",
-  ];
-  List<String> langRus = [
-    "Sefr иностранного языка",
-    "Большой тест",
-    "Тест 3",
+    // #index2
+    Colors.white,
+    Colors.black,
+    Colors.grey,
+    Colors.red,
+    Colors.grey.shade200,
+    // #index3,
+    Colors.yellow,
+    Colors.black,
+    Colors.grey,
+    Colors.red,
+    Colors.grey.shade200,
   ];
 
   void start() {
+
     setState(() {
       visibleContent = false;
       started = false;
       stopped = false;
       checkTimer = true;
+
+
     });
-    if (timeForTimer == 0)
+    if (changeTimerValue )
       timeForTimer = ((hour * 60 * 60) + (minute * 60) + second);
     // debugPrint(timeForTimer.toString());
     Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
-        if (timeForTimer < 1 || checkTimer == false) {
+        if (timeForTimer == 0 || checkTimer == false) {
           timer.cancel();
           if (timeForTimer == 0) {
             debugPrint("Stopped by default");
@@ -74,54 +78,42 @@ class _MyApState extends State<MyAp> {
           //  Navgation vaqt tugaganda
 
         } else if (timeForTimer < 60) {
-          // timeToDisplay = timeForTimer.toString();
-          timeToDisplay =
-              timeToDisplay = timeShows(h: 0, m: 0, s: timeForTimer);
+
           timeForTimer = timeForTimer - 1;
+          timeToDisplay = timeShows(h: 0, m: 0, s: timeForTimer);
         } else if (timeForTimer < 3600) {
           int m = timeForTimer ~/ 60;
           int s = timeForTimer - (60 * m);
-          // timeToDisplay = m.toString() + ":" + s.toString();
-          timeToDisplay = timeShows(h: 0, m: m, s: s);
+
+
           timeForTimer = timeForTimer - 1;
+          timeToDisplay = timeShows(h: 0, m: m, s: s);
         } else {
           int h = timeForTimer ~/ 3600;
           int t = timeForTimer - (3600 * h);
           int m = t ~/ 60;
           int s = t - (60 * m);
 
-          timeToDisplay = timeShows(h: h, m: m, s: s);
-          // ((h < 10) ? ("0" + h.toString()) : h.toString()) +
-          // ":" +
-          // ((m < 10) ? ("0" + m.toString()) : m.toString()) +
-          // ":" +
-          // ((s < 10) ? ("0" + s.toString()) : s.toString());
-
           timeForTimer = timeForTimer - 1;
+          timeToDisplay = timeShows(h: h, m: m, s: s);
         }
-        if (timeForTimer % 15 == 0 && qoshimcha == 0) {
+
+        if (timeForTimer < 1 ) languageTitle = "Test sinovi tugadi";
+        if (timeForTimer % 10 == 0 && qoshimcha == 0 && timeForTimer > 1) {
           qoshimcha = 1;
           languageTitle = "Test sinovi tugashiga qolgan vaqt";
-        } else if(timeForTimer % 15 == 0 && qoshimcha == 1){
+        } else if (timeForTimer % 10 == 0 && qoshimcha == 1 && timeForTimer > 1) {
           qoshimcha = 0;
           languageTitle = "Осталось время до конца теста";
         }
-
-
-
       });
-    });
-  }
-
-  void titleText() {
-    Future.delayed(Duration(seconds: 30)).then((value) {
-      setState(() {});
     });
   }
 
   void stop() {
     setState(() {
       visibleContent = true;
+
       started = true;
       stopped = true;
       checkTimer = false;
@@ -146,7 +138,7 @@ class _MyApState extends State<MyAp> {
     }
     if (s <= 9) {
       ssss = "0" + s.toString();
-    } else if (s == 0 || s == null) {
+    } else if (s < 1) {
       ssss = "00";
     } else {
       ssss = s.toString();
@@ -159,47 +151,15 @@ class _MyApState extends State<MyAp> {
   Widget timer({double screeSizes}) {
     return Container(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          SizedBox(
+            height:80,
+          ),
           Text(
             timeToDisplay,
             style: TextStyle(
-                fontSize: screeSizes * 0.22, fontWeight: FontWeight.w700),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              MaterialButton(
-                onPressed: started ? start : null,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                color: Colors.green,
-                child: Text(
-                  "Start",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              MaterialButton(
-                onPressed: stopped ? null : stop,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                color: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(
-                  "Stop",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ],
+                fontSize: screeSizes * 0.3,color: myTheme1[0+colorIndex], fontWeight: FontWeight.w700),
           ),
           Visibility(
             visible: visibleContent,
@@ -211,11 +171,11 @@ class _MyApState extends State<MyAp> {
                     margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: myTheme1[1+colorIndex],
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.shade200,
+                            color: myTheme1[4+colorIndex],
                             blurRadius: 1,
                             spreadRadius: 1,
                             offset: Offset(0.2, 0.2),
@@ -224,37 +184,56 @@ class _MyApState extends State<MyAp> {
                     child: Column(
                       children: [
                         Text(
-                          "Test turini tanlang",
+                          "Dastur fonini tanlang",
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                              color: myTheme1[0 + colorIndex], fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(height: 30,),
                         Container(
-                          height: 170,
-                          width: 200,
-                          child: ListView.builder(
-                            itemCount: langUzb.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text('${langUzb[index]}'),
-                                leading:
-                                    Checkbox(value: true, onChanged: (val) {}),
-                              );
-                            },
-                          ),
+                          height: 120,
+                          width: 150,
+                          child:Column(
+                            children: [
+                              GroupButton(
+                                isRadio: true,
+                                spacing: 10,
+                                buttonWidth: 140 ,
+
+                                onSelected: (index, isSelected){
+                                  if(index == 0){
+                                    setState(() {
+                                      colorIndex = 0;
+                                    });
+                                  } else if(index == 1){
+                                    setState(() {
+                                      colorIndex = 5;
+                                    });
+                                  } else if(index == 2){
+                                    setState(() {
+                                      colorIndex = 10;
+                                    });
+                                  }
+
+                                },
+                                buttons: [" tema 1", "tema 2", "tema 3", ],
+                              )
+                            ],
+                          )
                         ),
                       ],
                     ),
                   ),
                   Container(
-                    width: 300,
+                    width: 270,
+                    height: 210,
                     margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
+                        color: myTheme1[1+colorIndex],
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.shade200,
+                            color: myTheme1[4+colorIndex],
                             blurRadius: 1,
                             spreadRadius: 1,
                             offset: Offset(0.2, 0.2),
@@ -268,14 +247,14 @@ class _MyApState extends State<MyAp> {
                           children: [
                             Icon(
                               CupertinoIcons.stopwatch,
-                              size: screeSizes * 0.1,
+                              size: 60,
                             ),
                             SizedBox(
                               width: 10,
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: myTheme1[1+colorIndex],
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
@@ -287,9 +266,9 @@ class _MyApState extends State<MyAp> {
                                   ]),
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                " 0$sliderValue : ${sliderValueMinute <= 9 ? "${"0" + sliderValueMinute.round().toString()}" : sliderValueMinute.round().toString()}",
+                                " 0${sliderValue.round().toInt()} : ${sliderValueMinute <= 9 ? "${"0" + sliderValueMinute.round().toString()}" : sliderValueMinute.round().toString()}",
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 50),
+                                    color: myTheme1[0+colorIndex], fontSize: 30),
                               ),
                             ),
                           ],
@@ -299,7 +278,7 @@ class _MyApState extends State<MyAp> {
                             Text(
                               "soat",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: myTheme1[0 + colorIndex],
                                   fontWeight: FontWeight.w600),
                             ),
                             SizedBox(
@@ -309,13 +288,22 @@ class _MyApState extends State<MyAp> {
                               value: sliderValue,
                               min: 0,
                               max: 5,
+                              activeColor: myTheme1[0+colorIndex],
                               divisions: 5,
                               label: '$sliderValue',
                               onChanged: (value) {
                                 setState(
                                   () {
                                     sliderValue = value;
+                                    languageTitle = "Test sinovlari qolgan vaqt";
+                                    changeTimerValue = true;
                                     hour = value.round().toInt();
+                                    //###
+
+                                    timeToDisplay =
+                                        "0$hour:${minute.round().toInt() <= 9 ? "0" + minute.round().toString() : minute.round().toString()}: 00";
+
+                                    // timeShows(h:value.round().toInt(), m: minute );
                                   },
                                 );
                               },
@@ -327,7 +315,7 @@ class _MyApState extends State<MyAp> {
                             Text(
                               "minut",
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color:myTheme1[0+colorIndex],
                                   fontWeight: FontWeight.w600),
                             ),
                             SizedBox(
@@ -335,15 +323,23 @@ class _MyApState extends State<MyAp> {
                             ),
                             Slider(
                               value: sliderValueMinute,
-                              min: 5,
+                              min: 0,
                               max: 55,
+
+                              activeColor: myTheme1[0+colorIndex],
                               divisions: 55,
+
                               label: '${sliderValueMinute.round()}',
                               onChanged: (value) {
                                 setState(
                                   () {
                                     sliderValueMinute = value;
                                     minute = value.round().toInt();
+                                    changeTimerValue = true;
+                                    languageTitle = "Test sinovlari qolgan vaqt";
+                                    timeToDisplay =
+                                        "0$hour:${minute.round().toInt() <= 9 ? "0" + minute.round().toString() : minute.round().toString()}: 00";
+                                    // timeShows(h: hour, m:value.round().toInt() );
                                   },
                                 );
                               },
@@ -364,43 +360,95 @@ class _MyApState extends State<MyAp> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screeSize = screenWidth * screenHeight * 0.0008;
+    double screeSize = MediaQuery.of(context).size.height;
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screeSize = screenWidth * screenHeight * 0.0008;
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // showTitle(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("DTM"),
-              SizedBox(
-                height: 40,
-                width: 30,
+      backgroundColor: myTheme1[1+colorIndex],
+      body: Container(
+        height: screeSize * 1.1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // showTitle(),
+
+            Expanded(
+                flex: 10,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text(
+                        languageTitle,
+                        style: TextStyle(
+                          color: myTheme1[0+colorIndex],
+                          fontWeight: FontWeight.bold,
+                          fontSize: screeSize * 0.1,
+                        ),
+                      ),
+                      timer(screeSizes: screeSize),
+
+                    ],
+                  ),
+                )),
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: EdgeInsets.only(right: 50, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+
+                    Visibility(
+                      visible: visibleContent,
+                      child: IconButton(
+                      icon: Icon(
+                        CupertinoIcons.play,
+                        color: myTheme1[0+colorIndex],
+                        size: 30,
+                      ),
+                      onPressed: started ? start : null,
+                    ),),
+                    Visibility(
+                      visible: !visibleContent,
+                      child:IconButton(
+                      icon: Icon(
+                        CupertinoIcons.refresh,
+                        color: myTheme1[0+colorIndex],
+                        size: 30,
+                      ),
+                      onPressed: stopped ? null : stop,
+                    ), )
+
+                  ],
+                ),
               ),
-            ],
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              languageTitle,
-              style: TextStyle(color: Colors.black, fontSize: screeSize * 0.1),
             ),
-          ),
-          Expanded(
-              flex: 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  timer(screeSizes: screeSize),
-                ],
-              )),
-          //
-          // Text("StopTimer"),
-        ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 30,
+                ),
+                Column(
+                  children: [
+                    Text(
+                      "Dasturiy texnik ta'minot",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            //
+            // Text("StopTimer"),
+          ],
+        ),
       ),
     );
   }

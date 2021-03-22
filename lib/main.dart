@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
+/// 22.03.2021 23:17
 void main() {
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyAp()));
 }
@@ -25,12 +26,13 @@ class _MyApState extends State<MyAp> {
   bool checkTimer = true;
   bool visibleContent = true;
   String hhhh = "0", mmmm, ssss;
-  String languageTitle = "Test sinovlari qolgan vaqt";
+  String languageTitle = "Test sinovlari tugashiga qolgan vaqt".toUpperCase();
   double sliderValue = 3;
   double sliderValueMinute = 20;
   int qoshimcha = 0;
   int colorIndex = 0;
   bool changeTimerValue = false;
+
   int timerPause;
 
 
@@ -38,21 +40,21 @@ class _MyApState extends State<MyAp> {
     // #index1
     Colors.black,
     Colors.white,
-    Colors.grey,
-    Colors.red,
-    Colors.grey.shade200,
     // #index2
     Colors.white,
     Colors.black,
-    Colors.grey,
-    Colors.red,
-    Colors.grey.shade200,
     // #index3,
     Colors.yellow,
     Colors.black,
-    Colors.grey,
+    // #index4,
     Colors.red,
-    Colors.grey.shade200,
+    Colors.black,
+    // #index5,
+    Colors.blue,
+    Colors.black,
+    // #index6,
+    Colors.blue,
+    Colors.white,
   ];
 
   void start() {
@@ -64,8 +66,10 @@ class _MyApState extends State<MyAp> {
       checkTimer = true;
 
 
+
+
     });
-    if (changeTimerValue )
+    if (changeTimerValue)
       timeForTimer = ((hour * 60 * 60) + (minute * 60) + second);
     // debugPrint(timeForTimer.toString());
     Timer.periodic(Duration(seconds: 1), (timer) {
@@ -98,13 +102,13 @@ class _MyApState extends State<MyAp> {
           timeToDisplay = timeShows(h: h, m: m, s: s);
         }
 
-        if (timeForTimer < 1 ) languageTitle = "Test sinovi tugadi";
+        if (timeForTimer < 1 ) languageTitle = "Test sinovi tugadi".toUpperCase();
         if (timeForTimer % 10 == 0 && qoshimcha == 0 && timeForTimer > 1) {
           qoshimcha = 1;
-          languageTitle = "Test sinovi tugashiga qolgan vaqt";
+          languageTitle ="Test sinovlari tugashiga qolgan vaqt".toUpperCase();
         } else if (timeForTimer % 10 == 0 && qoshimcha == 1 && timeForTimer > 1) {
           qoshimcha = 0;
-          languageTitle = "Осталось время до конца теста";
+          languageTitle = "Время до окончания тестирования".toUpperCase();
         }
       });
     });
@@ -117,6 +121,8 @@ class _MyApState extends State<MyAp> {
       started = true;
       stopped = true;
       checkTimer = false;
+      changeTimerValue = false;
+
     });
   }
 
@@ -145,7 +151,7 @@ class _MyApState extends State<MyAp> {
     }
 
     print("$hhhh : $mmmm : $ssss");
-    return "$hhhh : $mmmm : $ssss";
+    return "$hhhh:$mmmm:$ssss";
   }
 
   Widget timer({double screeSizes}) {
@@ -159,7 +165,7 @@ class _MyApState extends State<MyAp> {
           Text(
             timeToDisplay,
             style: TextStyle(
-                fontSize: screeSizes * 0.3,color: myTheme1[0+colorIndex], fontWeight: FontWeight.w700),
+                fontSize: screeSizes * 0.35,color: myTheme1[0+colorIndex], fontWeight: FontWeight.w700),
           ),
           Visibility(
             visible: visibleContent,
@@ -168,6 +174,7 @@ class _MyApState extends State<MyAp> {
               child: Row(
                 children: [
                   Container(
+                    height: 200,
                     margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -175,12 +182,13 @@ class _MyApState extends State<MyAp> {
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            color: myTheme1[4+colorIndex],
-                            blurRadius: 1,
+                            color: Colors.grey,
+                            blurRadius: 2,
                             spreadRadius: 1,
-                            offset: Offset(0.2, 0.2),
-                          )
-                        ]),
+                            offset: Offset(0.4, 0.4),
+                          ),
+
+                        ],),
                     child: Column(
                       children: [
                         Text(
@@ -192,32 +200,57 @@ class _MyApState extends State<MyAp> {
                         Container(
                           height: 120,
                           width: 150,
-                          child:Column(
-                            children: [
-                              GroupButton(
-                                isRadio: true,
-                                spacing: 10,
-                                buttonWidth: 140 ,
+                          decoration: BoxDecoration(
 
-                                onSelected: (index, isSelected){
-                                  if(index == 0){
-                                    setState(() {
-                                      colorIndex = 0;
-                                    });
-                                  } else if(index == 1){
-                                    setState(() {
-                                      colorIndex = 5;
-                                    });
-                                  } else if(index == 2){
-                                    setState(() {
-                                      colorIndex = 10;
-                                    });
-                                  }
+                          ),
+                          child:SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                GroupButton(
+                                  isRadio: true,
+                                  spacing: 10,
+                                  buttonWidth: 140 ,
 
-                                },
-                                buttons: [" tema 1", "tema 2", "tema 3", ],
-                              )
-                            ],
+                                  onSelected: (index, isSelected){
+                                    if(index == 0){
+                                      setState(() {
+                                        colorIndex = 0;
+                                      });
+                                    } else if(index == 1){
+                                      setState(() {
+                                        colorIndex =2;
+                                      });
+                                    } else if(index == 2){
+                                      setState(() {
+                                        colorIndex = 4;
+                                      });
+
+                                    }
+                                    else if(index == 3){
+                                      setState(() {
+                                        colorIndex = 6;
+                                      });
+
+                                    }
+                                    else if(index == 4){
+                                      setState(() {
+                                        colorIndex = 8;
+                                      });
+
+                                    }
+                                    else if(index == 5){
+                                      setState(() {
+                                        colorIndex = 10;
+                                      });
+
+                                    }
+
+
+                                  },
+                                  buttons: ["fon 1", "fon 2", "fon 3",  "fon 4", "fon 5", "fon 6",],
+                                )
+                              ],
+                            ),
                           )
                         ),
                       ],
@@ -225,7 +258,7 @@ class _MyApState extends State<MyAp> {
                   ),
                   Container(
                     width: 270,
-                    height: 210,
+                    height: 200,
                     margin: EdgeInsets.all(20),
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -233,12 +266,16 @@ class _MyApState extends State<MyAp> {
                         color: myTheme1[1+colorIndex],
                         boxShadow: [
                           BoxShadow(
-                            color: myTheme1[4+colorIndex],
-                            blurRadius: 1,
+                            color: Colors.grey,
+                            blurRadius: 2,
                             spreadRadius: 1,
-                            offset: Offset(0.2, 0.2),
-                          )
-                        ]),
+                            offset: Offset(0.4, 0.4),
+                          ),
+
+                        ],
+
+
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -248,6 +285,7 @@ class _MyApState extends State<MyAp> {
                             Icon(
                               CupertinoIcons.stopwatch,
                               size: 60,
+                              color: myTheme1[0+colorIndex],
                             ),
                             SizedBox(
                               width: 10,
@@ -266,7 +304,9 @@ class _MyApState extends State<MyAp> {
                                   ]),
                               padding: EdgeInsets.all(10),
                               child: Text(
-                                " 0${sliderValue.round().toInt()} : ${sliderValueMinute <= 9 ? "${"0" + sliderValueMinute.round().toString()}" : sliderValueMinute.round().toString()}",
+                                " 0${sliderValue.round().toInt()}:"
+                                    "${sliderValueMinute <= 9 ? "${"0" + sliderValueMinute.round().toString()}":
+                                sliderValueMinute.round().toString()}",
                                 style: TextStyle(
                                     color: myTheme1[0+colorIndex], fontSize: 30),
                               ),
@@ -295,13 +335,14 @@ class _MyApState extends State<MyAp> {
                                 setState(
                                   () {
                                     sliderValue = value;
-                                    languageTitle = "Test sinovlari qolgan vaqt";
+                                    languageTitle ="Test sinovlari tugashiga qolgan vaqt".toUpperCase();
                                     changeTimerValue = true;
                                     hour = value.round().toInt();
                                     //###
 
                                     timeToDisplay =
-                                        "0$hour:${minute.round().toInt() <= 9 ? "0" + minute.round().toString() : minute.round().toString()}: 00";
+                                        "0$hour:${minute.round().toInt() <= 9 ? "0"
+                                            + minute.round().toString():minute.round().toString()}:00";
 
                                     // timeShows(h:value.round().toInt(), m: minute );
                                   },
@@ -336,9 +377,10 @@ class _MyApState extends State<MyAp> {
                                     sliderValueMinute = value;
                                     minute = value.round().toInt();
                                     changeTimerValue = true;
-                                    languageTitle = "Test sinovlari qolgan vaqt";
+                                    languageTitle = "Test sinovlari tugashiga qolgan vaqt".toUpperCase();
                                     timeToDisplay =
-                                        "0$hour:${minute.round().toInt() <= 9 ? "0" + minute.round().toString() : minute.round().toString()}: 00";
+                                        "0$hour:${minute.round().toInt() <= 9 ? "0" + minute.round().toString()
+                                            :minute.round().toString()}:00";
                                     // timeShows(h: hour, m:value.round().toInt() );
                                   },
                                 );
@@ -386,7 +428,7 @@ class _MyApState extends State<MyAp> {
                         style: TextStyle(
                           color: myTheme1[0+colorIndex],
                           fontWeight: FontWeight.bold,
-                          fontSize: screeSize * 0.1,
+                          fontSize: screeSize * 0.09,
                         ),
                       ),
                       timer(screeSizes: screeSize),

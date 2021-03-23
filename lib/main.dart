@@ -3,9 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
+
 /// 22.03.2021 23:17
 void main() {
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyAp()));
+  runApp(MaterialApp(
+      color: Colors.black,
+      title: "DTM",
+
+      debugShowCheckedModeBanner: false, home: MyAp()));
 }
 
 class MyAp extends StatefulWidget {
@@ -32,7 +37,7 @@ class _MyApState extends State<MyAp> {
   int qoshimcha = 0;
   int colorIndex = 0;
   bool changeTimerValue = false;
-
+  String _chosenValue;
   int timerPause;
 
 
@@ -247,7 +252,8 @@ class _MyApState extends State<MyAp> {
 
 
                                   },
-                                  buttons: ["fon 1", "fon 2", "fon 3",  "fon 4", "fon 5", "fon 6",],
+
+                                  buttons: ["fon 0", "fon 2", "fon 4",  "fon 6", "fon 8",],
                                 )
                               ],
                             ),
@@ -406,6 +412,8 @@ class _MyApState extends State<MyAp> {
     // double screenWidth = MediaQuery.of(context).size.width;
     // double screeSize = screenWidth * screenHeight * 0.0008;
     return Scaffold(
+
+
       backgroundColor: myTheme1[1+colorIndex],
       body: Container(
         height: screeSize * 1.1,
@@ -428,7 +436,7 @@ class _MyApState extends State<MyAp> {
                         style: TextStyle(
                           color: myTheme1[0+colorIndex],
                           fontWeight: FontWeight.bold,
-                          fontSize: screeSize * 0.09,
+                          fontSize: screeSize * 0.08,
                         ),
                       ),
                       timer(screeSizes: screeSize),
@@ -441,30 +449,81 @@ class _MyApState extends State<MyAp> {
               child: Padding(
                 padding: EdgeInsets.only(right: 50, bottom: 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Visibility(
 
-                    Visibility(
-                      visible: visibleContent,
-                      child: IconButton(
-                      icon: Icon(
-                        CupertinoIcons.play,
-                        color: myTheme1[0+colorIndex],
-                        size: 30,
-                      ),
-                      onPressed: started ? start : null,
-                    ),),
-                    Visibility(
-                      visible: !visibleContent,
-                      child:IconButton(
-                      icon: Icon(
-                        CupertinoIcons.refresh,
-                        color: myTheme1[0+colorIndex],
-                        size: 30,
-                      ),
-                      onPressed: stopped ? null : stop,
-                    ), )
+                        visible: !visibleContent,
+                        child: DropdownButton<String>(
+                          focusColor:Colors.white,
+                          value: _chosenValue,
+                          dropdownColor: myTheme1[1+colorIndex],
 
+
+                          //elevation: 5,
+                          style: TextStyle(color: Colors.grey.shade900),
+                          iconEnabledColor:Colors.grey.shade800,
+                          items: <String>[
+                            'fon 0', /// 0
+                            'fon 2',/// 2
+                            'fon 4',/// 4
+                            'fon 6',/// 6
+                            'fon 8',/// 8
+
+                          ].map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value,style:TextStyle(color:Colors.grey.shade800),),
+                            );
+                          }).toList(),
+                          hint:Text(
+                            "...",
+                            style: TextStyle(
+                                color: myTheme1[0+colorIndex],
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              _chosenValue = value;
+                              print(value.substring(4,5));
+                              colorIndex = int.parse(value.substring(4,5));
+
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+
+
+                        Visibility(
+                          visible: visibleContent,
+                          child: IconButton(
+                          icon: Icon(
+                            CupertinoIcons.play,
+                            color: myTheme1[0+colorIndex],
+                            size: 30,
+                          ),
+                          onPressed: started ? start : null,
+                        ),),
+                        Visibility(
+                          visible: !visibleContent,
+                          child:IconButton(
+                          icon: Icon(
+                            CupertinoIcons.pause,
+                            color: myTheme1[0+colorIndex],
+                            size: 30,
+                          ),
+                          onPressed: stopped ? null : stop,
+                        ), )
+
+                      ],
+                    ),
                   ],
                 ),
               ),

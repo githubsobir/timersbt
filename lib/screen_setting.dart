@@ -44,7 +44,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                   height:screenSize < 1000 && screenSize > 760 ? screenSize*0.27: 240,
 
                   margin: EdgeInsets.all(20),
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.only(left: 5, top: 5),
                   decoration: BoxDecoration(
                     color: providerLogicTimer
                         .myTheme1[1 + providerLogicTimer.colorIndex],
@@ -122,11 +122,11 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                   // ),
                 ),
               AnimatedContainer(
-              width: screenSize < 1000 && screenSize > 760 ? screenSize*0.3: 270,
+              width: screenSize < 1000 && screenSize > 760 ? screenSize*0.315: 270,
               height:screenSize < 1000 && screenSize > 760 ? screenSize*0.27: 240,
 
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.all(15),
+              margin: EdgeInsets.all(5),
+              padding: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 color: providerLogicTimer
                     .myTheme1[1 + providerLogicTimer.colorIndex],
@@ -150,10 +150,14 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                 children: [
                   /// Kichkina kontent
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         CupertinoIcons.stopwatch,
-                        size: 60,
+                        // size: 60,
+                        size: screenSize < 1000 && screenSize > 760 ? screenSize*0.04: 60,
+                        // height:screenSize < 1000 && screenSize > 760 ? screenSize*0.27: 240,
+
                         color: providerLogicTimer
                             .myTheme1[0 + providerLogicTimer.colorIndex],
                       ),
@@ -161,6 +165,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                         width: 10,
                       ),
                       Container(
+                        padding:EdgeInsets.only(left:10, right: 10, top: 5, bottom: 5),
                         decoration: BoxDecoration(
                             color: providerLogicTimer.myTheme1[
                                 1 + providerLogicTimer.colorIndex],
@@ -174,14 +179,17 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                                 offset: Offset(0.2, 0.1),
                               )
                             ]),
-                        padding: EdgeInsets.all(10),
+                        // padding: EdgeInsets.all(screenSize < 1000 && screenSize > 760 ? screenSize*0.01: 10),
                         child: Text(
-                          " 0${providerLogicTimer.sliderValue.round().toInt()}:"
-                          "${providerLogicTimer.sliderValueMinute <= 9 ? "${"0" + providerLogicTimer.sliderValueMinute.round().toString()}" : providerLogicTimer.sliderValueMinute.round().toString()}",
+                          providerLogicTimer.timeToDisplay,
+                          // " 0${providerLogicTimer.sliderValue.round().toInt()}:"
+                          // "${providerLogicTimer.sliderValueMinute <= 9 ? "${"0" + providerLogicTimer.sliderValueMinute.round().toString()}" : providerLogicTimer.sliderValueMinute.round().toString()}",
                           style: TextStyle(
                               color: providerLogicTimer.myTheme1[
                                   0 + providerLogicTimer.colorIndex],
-                              fontSize: 30),
+                              fontSize:screenSize < 1000 && screenSize > 760 ? screenSize*0.03: 30,
+
+                          ),
                         ),
                       ),
                     ],
@@ -189,6 +197,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
 
                   /// Soat
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "soat",
@@ -218,6 +227,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
 
                   /// Minut
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "minut",
@@ -226,9 +236,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
                                 0 + providerLogicTimer.colorIndex],
                             fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+
                       Slider(
                         value: providerLogicTimer.sliderValueMinute,
                         min: 0,

@@ -22,7 +22,7 @@ Widget timer({BuildContext context, ProviderLogicTimer providerLogicTimer}) {
           style: TextStyle(
               fontSize: providerLogicTimer.visibleContent
                   ? screenSize * 0.15
-                  : screenSize * 0.3,
+                  : screenSize * 0.25,
               color: providerLogicTimer
                   .myTheme1[0 + providerLogicTimer.colorIndex],
               fontWeight: FontWeight.w700),
